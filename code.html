@@ -2,7 +2,12 @@
 <html>
   <head>
     <title>Editor in tiny iframe</title>
-
+    <script>
+      var urlParams = new URLSearchParams(window.location.search);
+      var fileUrl = urlParams.has('file')
+        ? urlParams.get('file')
+        : 'index.html';
+    </script>
     <style>
       #myIframe1 {
         border: 1px solid blue;

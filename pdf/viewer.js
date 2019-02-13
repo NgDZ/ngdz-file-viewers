@@ -19,7 +19,15 @@
  * @licend The above is the entire license notice for the
  * Javascript code in this page
  */
-
+function getJwt() {
+  try{
+      
+return JSON.parse(localStorage.getItem('auth-tokens') || '{}') .access_token;
+  }catch(er){
+    console.log(er,(localStorage.getItem('auth-tokens') || '{}'));
+    return null;
+  }
+}
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -949,6 +957,10 @@ var PDFViewerApplication = {
                   parameters[prop] = args[prop];
                 }
               }
+              var token=getJwt();
+              if(token){
+                parameters.httpHeaders={"Authorization": 'Bearer ' + token};
+             }
               loadingTask = (0, _pdfjsLib.getDocument)(parameters);
 
               this.pdfLoadingTask = loadingTask;
@@ -1594,6 +1606,7 @@ function webViewerInitialized() {
   var file = void 0;
   var queryString = document.location.search.substring(1);
   var params = (0, _ui_utils.parseQueryString)(queryString);
+  console.log(_app_options.AppOptions);
   file = 'file' in params ? params.file : _app_options.AppOptions.get('defaultUrl');
   validateFileURL(file);
   var fileInput = document.createElement('input');
@@ -4374,7 +4387,7 @@ var defaultOptions = {
     kind: OptionKind.VIEWER
   },
   enableWebGL: {
-    value: false,
+    value: true,
     kind: OptionKind.VIEWER
   },
   eventBusDispatchToDOM: {
@@ -10883,7 +10896,7 @@ var SecondaryToolbar = function () {
             close = _buttons$button.close,
             eventDetails = _buttons$button.eventDetails;
 
-        element.addEventListener('click', function (evt) {
+        if(element)element.addEventListener('click', function (evt) {
           if (eventName !== null) {
             var details = { source: _this2 };
             for (var property in eventDetails) {
@@ -11320,10 +11333,10 @@ var Toolbar = function () {
       items.openFile.addEventListener('click', function () {
         eventBus.dispatch('openfile', { source: self });
       });
-      items.print.addEventListener('click', function () {
+      if(items.print)items.print.addEventListener('click', function () {
         eventBus.dispatch('print', { source: self });
       });
-      items.download.addEventListener('click', function () {
+      if(items.download)items.download.addEventListener('click', function () {
         eventBus.dispatch('download', { source: self });
       });
       items.scaleSelect.oncontextmenu = _ui_utils.noContextMenuHandler;
@@ -11826,7 +11839,7 @@ function getDefaultPreferences() {
       "defaultZoomValue": "",
       "sidebarViewOnLoad": 0,
       "cursorToolOnLoad": 0,
-      "enableWebGL": false,
+      "enableWebGL": true,
       "eventBusDispatchToDOM": false,
       "pdfBugEnabled": false,
       "disableRange": false,
