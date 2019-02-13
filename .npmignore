@@ -11,9 +11,8 @@
 config.gypi
 CVS
 npm-debug.log
-*.js
-org*
-icons-org
 *.pdf
+*.ps1
 assets
-pdf
+/src-pdf
+/src-code

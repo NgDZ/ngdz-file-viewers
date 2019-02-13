@@ -206,14 +206,16 @@ See https://github.com/adobe-type-tools/cmap-resources
                 <span id="numPages" class="toolbarLabel"></span>
               </div>
               <div id="toolbarViewerRight">
-                <button id="presentationMode" class="toolbarButton presentationMode hiddenLargeView" title="Switch to Presentation Mode" tabindex="31" data-l10n-id="presentation_mode">
+                <button id="presentationMode" class="toolbarButton download  hiddenLargeView" title="Switch to Presentation Mode" tabindex="31" data-l10n-id="presentation_mode">
                   <span data-l10n-id="presentation_mode_label">Presentation Mode</span>
                 </button>
 
-                <button id="openFile" class="toolbarButton openFile hiddenLargeView" title="Open File" tabindex="32" data-l10n-id="open_file">
+                <button style="display:none;" id="openFile" class="toolbarButton openFile hiddenLargeView" title="Open File" tabindex="32" data-l10n-id="open_file">
                   <span data-l10n-id="open_file_label">Open</span>
                 </button>
-
+                <button id="fullscreen" class="toolbarButton presentationMode hiddenMediumView" title="fullscreen" tabindex="33" data-l10n-id="fullscreen">
+                    <span data-l10n-id="fullscreen">fullscreen</span>
+                </button>
                 <!-- <button id="print" class="toolbarButton print hiddenMediumView" title="Print" tabindex="33" data-l10n-id="print">
                   <span data-l10n-id="print_label">Print</span>
                 </button>
@@ -387,8 +389,38 @@ See https://github.com/adobe-type-tools/cmap-resources
         </div>
       </div>  <!-- overlayContainer -->
 
-    </div> <!-- outerContainer -->
-    <div id="printContainer"></div>
+    </div> <!-- outerContainer --> 
+    <script>
+        var isToggleFullscreen=false;
+        document.getElementById('fullscreen').onclick=function(){
+      
+            var  elem = document.getElementsByTagName('html')[0];
+            
+            if (isToggleFullscreen) {
+              elem = document;
+              if (elem.cancelFullscreen) {
+                elem.cancelFullscreen();
+              } else if (elem.webkitCancelFullScreen) {
+                elem.webkitCancelFullScreen();
+              } else if (elem.mozCancelFullScreen) {
+                elem.mozCancelFullScreen();
+              } else if (elem.msCancelFullScreen) {
+                elem.msCancelFullScreen();
+              }
+            } else {
+              if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+              } else if (elem.webkitRequestFullScreen) {
+                elem.webkitRequestFullScreen();
+              } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+              } else if (elem.msRequestFullScreen) {
+                elem.msRequestFullScreen();
+              }
+            }
+            isToggleFullscreen = !isToggleFullscreen;
+        }
+    </script>
   </body>
 </html>
 

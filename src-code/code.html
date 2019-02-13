@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <script>
+      var urlParams = new URLSearchParams(window.location.search);
+      var fileUrl = urlParams.has('file')
+        ? urlParams.get('file')
+        : 'index.html';
+      var extension = urlParams.has('extension')
+        ? urlParams.get('extension')
+        : '.text';
+      extension = extension.toLowerCase();
+      var extensionLanguage = {
+        '.html': 'html',
+        '.js': 'javascript',
+        '.json': 'json',
+        '.text': 'text',
+        '.txt': 'text',
+        '.cs': 'csharp',
+        '.css': 'css'
+      };
+      function load() {
+        console.log('application-FQ');
+        var language = extensionLanguage[extension];
+        if (language == null) {
+          language = extension.replace('.', '');
+        }
+
+        fetch(fileUrl).then(e => {
+          console.log(e);
+          if (e.status != 200) {
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('error').style.display = 'block';
+            return;
+          }
+          e.text().then(function(text) {
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('container').style.display = 'block';
+            require.config({ paths: { vs: './vs' } });
+
+            require(['vs/editor/editor.main'], function() {
+              var editor = monaco.editor.create(
+                document.getElementById('container'),
+                {
+                  value: [text].join('\n'),
+                  language: language
+                }
+              );
+
+              window.onresize = function() {
+                editor.layout();
+              };
+            });
+          });
+        });
+      }
+    </script>
+    <style type="text/css">
+      html,
+      body,
+      #container {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        border: 0;
+      }
+
+      .lds-dual-ring {
+        content: ' ';
+        display: block;
+        width: 246px;
+        height: 246px;
+        margin: 1px;
+        border-radius: 50%;
+        border: 15px solid rgb(63, 81, 181);
+        border-color: rgb(63, 81, 181) transparent rgb(63, 81, 181) transparent;
+        animation: lds-dual-ring 1.2s linear infinite;
+      }
+      @keyframes lds-dual-ring {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      #loader {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #error {
+        color: #d8000c;
+        background-color: #ffd2d2;
+        margin: 20px 32px;
+        font-size: 3em;
+        vertical-align: middle;
+      }
+    </style>
+  </head>
+  <body onload="load()">
+    <div id="loader" style="width:100%;height:100%;">
+      <div class="lds-dual-ring"></div>
+    </div>
+    <div id="container" style="width:100%;height:100%;display: none;"></div>
+    <div id="error" style="display: none;">
+      Fichier non trouvé
+    </div>
+    <script src="./vs/loader.js"></script>
+  </body>
+</html>
