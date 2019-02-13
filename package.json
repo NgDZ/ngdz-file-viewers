@@ -1,0 +1,29 @@
+{
+  "name": "bmg-file-viewers",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/badre429/bmg-file-viewers.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/badre429/bmg-file-viewers/issues"
+  },
+  "homepage": "https://github.com/badre429/bmg-file-viewers#readme",
+  "devDependencies": {
+    "browserify": "^16.2.3",
+    "monaco-editor": "^0.15.6",
+    "pdfjs-dist": "^2.0.943"
+  },
+  "dependencies": {
+    "uglify-js": "^3.4.9",
+    "uglifyjs": "^2.4.11"
+  }
+}
