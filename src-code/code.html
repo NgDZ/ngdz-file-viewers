@@ -24,12 +24,14 @@
       var extensionLanguage = {
         '.html': 'html',
         '.js': 'javascript',
+        '.ts': 'typescript',
         '.json': 'json',
         '.text': 'text',
         '.txt': 'text',
         '.md': 'markdown',
         '.cs': 'csharp',
         '.css': 'css',
+        '.scss': 'css',
         '.h': 'cpp',
         '.cshtml': 'razor'
       };
@@ -71,7 +73,7 @@
           xhr.open('GET', fileUrl);
           var jwt = getJwt();
           if (jwt != null) {
-            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            xhr.setRequestHeader('Authorization', 'Bearer ' + jwt);
           }
           xhr.responseType = 'text';
           xhr.send();
