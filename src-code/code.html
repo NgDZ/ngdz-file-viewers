@@ -4,6 +4,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <script>
+      function getJwt() {
+        try {
+          return JSON.parse(localStorage.getItem('auth-tokens') || '{}')
+            .access_token;
+        } catch (er) {
+          console.log(er, localStorage.getItem('auth-tokens') || '{}');
+          return null;
+        }
+      }
       var urlParams = new URLSearchParams(window.location.search);
       var fileUrl = urlParams.has('file')
         ? urlParams.get('file')
@@ -18,8 +27,11 @@
         '.json': 'json',
         '.text': 'text',
         '.txt': 'text',
+        '.md': 'markdown',
         '.cs': 'csharp',
-        '.css': 'css'
+        '.css': 'css',
+        '.h': 'cpp',
+        '.cshtml': 'razor'
       };
       function load() {
         console.log('application-FQ');
@@ -27,34 +39,45 @@
         if (language == null) {
           language = extension.replace('.', '');
         }
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function() {
+          if (xhr.readyState === xhr.DONE) {
+            if (xhr.status === 200) {
+              var text = xhr.responseText;
+              document.getElementById('loader').style.display = 'none';
+              document.getElementById('container').style.display = 'block';
+              require.config({ paths: { vs: './vs' } });
 
-        fetch(fileUrl).then(e => {
-          console.log(e);
-          if (e.status != 200) {
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('error').style.display = 'block';
-            return;
+              require(['vs/editor/editor.main'], function() {
+                var editor = monaco.editor.create(
+                  document.getElementById('container'),
+                  {
+                    value: [text].join('\n'),
+                    language: language
+                  }
+                );
+
+                window.onresize = function() {
+                  editor.layout();
+                };
+              });
+            } else {
+              document.getElementById('loader').style.display = 'none';
+              document.getElementById('error').style.display = 'block';
+            }
           }
-          e.text().then(function(text) {
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('container').style.display = 'block';
-            require.config({ paths: { vs: './vs' } });
-
-            require(['vs/editor/editor.main'], function() {
-              var editor = monaco.editor.create(
-                document.getElementById('container'),
-                {
-                  value: [text].join('\n'),
-                  language: language
-                }
-              );
-
-              window.onresize = function() {
-                editor.layout();
-              };
-            });
-          });
-        });
+        };
+        try {
+          xhr.open('GET', fileUrl);
+          var jwt = getJwt();
+          if (jwt != null) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+          }
+          xhr.responseType = 'text';
+          xhr.send();
+        } catch (ex) {
+          throw ex;
+        }
       }
     </script>
     <style type="text/css">

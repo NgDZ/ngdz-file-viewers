@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  </head>
+  <body></body>
+
+  <script>
+    var $buoop = {
+      required: {
+        e: 13, //IE
+        f: 61, //Firefox
+        o: 53, //Opera
+        s: 10, //Safari
+        c: 75 //Chrome
+      },
+      api: 2019.02,
+      burl: 'https://www.google.com/chrome/?standalone=1'
+    };
+    function $buo_f() {
+      var e = document.createElement('script');
+      e.src = './browser.js';
+      document.body.appendChild(e);
+    }
+    try {
+      document.addEventListener('DOMContentLoaded', $buo_f, false);
+    } catch (e) {
+      window.attachEvent('onload', $buo_f);
+    }
+  </script>
+</html>

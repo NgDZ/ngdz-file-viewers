@@ -21,5 +21,7 @@ Copy-Item .\src-pdf\* .\dist\pdf\ -Recurse
 .\node_modules\.bin\uglifyjs .\src-pdf\viewer.js -o .\dist\pdf\viewer.js
 Copy-Item .\dist\pdf\viewer.html .\dist\pdf\index.html
 
+Copy-Item .\src-browser\* .\dist\
+.\node_modules\.bin\uglifyjs .\dist\browser.js -o .\dist\browser.js
 # HLM
 Get-ChildItem .\dist\*.map -Recurse | Remove-Item
