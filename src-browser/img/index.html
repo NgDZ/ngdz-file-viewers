@@ -3,7 +3,11 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <link href="./viewer.min.css" rel="stylesheet" />
     <script>
+      window.oncontextmenu = function() {
+        return false;
+      };
       function getJwt() {
         try {
           return JSON.parse(localStorage.getItem('auth-tokens') || '{}')
@@ -36,50 +40,23 @@
         '.cshtml': 'razor'
       };
       function load() {
-        console.log('application-FQ');
-        var language = extensionLanguage[extension];
-        if (language == null) {
-          language = extension.replace('.', '');
+        var jwt = getJwt();
+        var httpHeader = {};
+        if (jwt != null) {
+          httpHeader['Authorization'] = 'Bearer ' + jwt;
         }
-        var xhr = new XMLHttpRequest();
-        xhr.onload = function() {
-          if (xhr.readyState === xhr.DONE) {
-            if (xhr.status === 200) {
-              var text = xhr.responseText;
-              document.getElementById('loader').style.display = 'none';
-              document.getElementById('container').style.display = 'block';
-              require.config({ paths: { vs: './vs' } });
-
-              require(['vs/editor/editor.main'], function() {
-                var editor = monaco.editor.create(
-                  document.getElementById('container'),
-                  {
-                    value: [text].join('\n'),
-                    language: language
-                  }
-                );
-
-                window.onresize = function() {
-                  editor.layout();
-                };
-              });
-            } else {
-              document.getElementById('loader').style.display = 'none';
-              document.getElementById('error').style.display = 'block';
-            }
-          }
-        };
-        try {
-          xhr.open('GET', fileUrl);
-          var jwt = getJwt();
-          if (jwt != null) {
-            xhr.setRequestHeader('Authorization', 'Bearer ' + jwt);
-          }
-          xhr.responseType = 'text';
-          xhr.send();
-        } catch (ex) {
-          throw ex;
-        }
+        fetch(fileUrl, {
+          headers: httpHeader
+        })
+          .then(response => response.blob())
+          .then(blob => {
+            let img = document.getElementById('downImage');
+            let url = URL.createObjectURL(blob);
+            img.src = url;
+            const viewer = new Viewer(document.getElementById('downImage'), {
+              inline: true
+            });
+          });
       }
     </script>
     <style type="text/css">
@@ -126,6 +103,9 @@
         font-size: 3em;
         vertical-align: middle;
       }
+      .viewer-navbar {
+        display: none !important;
+      }
       @media print {
         body {
           display: none !important;
@@ -135,12 +115,12 @@
   </head>
   <body onload="load()">
     <div id="loader" style="width:100%;height:100%;">
-      <div class="lds-dual-ring"></div>
+      <img id="downImage" />
     </div>
     <div id="container" style="width:100%;height:100%;display: none;"></div>
     <div id="error" style="display: none;">
       Fichier non trouvé
     </div>
-    <script src="./vs/loader.js"></script>
+    <script src="./viewer.min.js"></script>
   </body>
 </html>
