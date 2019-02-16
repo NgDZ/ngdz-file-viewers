@@ -2,11 +2,19 @@
 
 ## PDF Viwer
 
-dist\pdf\viewer.html?file=\a.pdf&locale=fr
+pdf\viewer.html?file=\a.pdf&locale=fr
 
 ## CODE Viwer
 
 code\code.html?file=foo.cpp&extension=.cpp
+
+## Image Viwer
+
+img\index.html?file=/image.jpg
+
+## Video player
+
+video\index.html?file=/video.mp4
 
 ## Browser min version
 

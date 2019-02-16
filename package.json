@@ -1,20 +1,20 @@
 {
-  "name": "bmg-file-viewers",
-  "version": "0.0.6",
+  "name": "ngdz-file-viewers",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/badre429/bmg-file-viewers.git"
+    "url": "git+https://github.com/ngdz/ngdz-file-viewers.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/badre429/bmg-file-viewers/issues"
+    "url": "https://github.com/ngdz/ngdz-file-viewers/issues"
   },
-  "homepage": "https://github.com/badre429/bmg-file-viewers#readme",
+  "homepage": "https://github.com/ngdz/ngdz-file-viewers#readme",
   "devDependencies": {
     "monaco-editor": "^0.15.6",
     "pdfjs-dist": "^2.0.943",

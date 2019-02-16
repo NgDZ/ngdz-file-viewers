@@ -41,10 +41,10 @@
       var urlParams = new URLSearchParams(window.location.search);
       var fileUrl = urlParams.has('file')
         ? urlParams.get('file')
-        : 'index.html';
+        : 'index.mp4';
       var extension = urlParams.has('extension')
         ? urlParams.get('extension')
-        : '.text';
+        : '.mp4';
       videojs.Hls.xhr.beforeRequest = function(options) {
         var jwt = getJwt();
         var httpHeader = {};
