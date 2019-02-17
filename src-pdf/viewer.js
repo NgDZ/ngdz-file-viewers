@@ -24,7 +24,7 @@ function getJwt() {
       
 return JSON.parse(localStorage.getItem('auth-tokens') || '{}') .access_token;
   }catch(er){
-    console.log(er,(localStorage.getItem('auth-tokens') || '{}'));
+    // console.log(er,(localStorage.getItem('auth-tokens') || '{}'));
     return null;
   }
 }
@@ -1302,7 +1302,7 @@ var PDFViewerApplication = {
       _this5.documentInfo = info;
       _this5.metadata = metadata;
       _this5.contentDispositionFilename = contentDispositionFilename;
-      console.log('PDF ' + pdfDocument.fingerprint + ' [' + info.PDFFormatVersion + ' ' + (info.Producer || '-').trim() + ' / ' + (info.Creator || '-').trim() + ']' + ' (PDF.js: ' + (_pdfjsLib.version || '-') + (_app_options.AppOptions.get('enableWebGL') ? ' [WebGL]' : '') + ')');
+      // console.log('PDF ' + pdfDocument.fingerprint + ' [' + info.PDFFormatVersion + ' ' + (info.Producer || '-').trim() + ' / ' + (info.Creator || '-').trim() + ']' + ' (PDF.js: ' + (_pdfjsLib.version || '-') + (_app_options.AppOptions.get('enableWebGL') ? ' [WebGL]' : '') + ')');
       var pdfTitle = void 0;
       if (metadata && metadata.has('dc:title')) {
         var title = metadata.get('dc:title');
@@ -1608,7 +1608,7 @@ function webViewerInitialized() {
   var file = void 0;
   var queryString = document.location.search.substring(1);
   var params = (0, _ui_utils.parseQueryString)(queryString);
-  console.log(_app_options.AppOptions);
+  // console.log(_app_options.AppOptions);
   file = 'file' in params ? params.file : _app_options.AppOptions.get('defaultUrl');
   validateFileURL(file);
   var fileInput = document.createElement('input');
@@ -1678,9 +1678,9 @@ function webViewerInitialized() {
 var webViewerOpenFileViaURL = void 0;
 {
   webViewerOpenFileViaURL = function webViewerOpenFileViaURL(file) {
-    if(windows.pdfDownloadDecrypt!=null){
+    if(window.pdfDownloadDecrypt!=null){
       // TODO Decript file
-      windows.pdfDownloadDecrypt(file,function(response){
+      window.pdfDownloadDecrypt(file,function(response){
         PDFViewerApplication.open(response);
       });
       return;
@@ -4607,6 +4607,10 @@ var _ui_utils = __webpack_require__(6);
 
 function attachDOMEventsToEventBus(eventBus) {
   eventBus.on('documentload', function () {
+    try{
+      
+      PDFViewerApplication.pdfCursorTools.switchTool(_pdf_cursor_tools.CursorTool.HAND);
+    }catch(e){}
     var event = document.createEvent('CustomEvent');
     event.initCustomEvent('documentload', true, true, {});
     window.dispatchEvent(event);
@@ -12570,7 +12574,7 @@ document.webL10n = function (window, document, undefined) {
     if (langCount === 0) {
       var dict = getL10nDictionary();
       if (dict && dict.locales && dict.default_locale) {
-        console.log('using the embedded JSON directory, early way out');
+        // console.log('using the embedded JSON directory, early way out');
         gL10nData = dict.locales[lang];
         if (!gL10nData) {
           var defaultLocale = dict.default_locale.toLowerCase();
@@ -12586,7 +12590,7 @@ document.webL10n = function (window, document, undefined) {
         }
         callback();
       } else {
-        console.log('no resource to load, early way out');
+        // console.log('no resource to load, early way out');
       }
       fireL10nReadyEvent(lang);
       gReadyState = 'complete';
@@ -13012,7 +13016,7 @@ document.webL10n = function (window, document, undefined) {
       if (arg in gL10nData) {
         return gL10nData[arg];
       }
-      console.log('argument {{' + arg + '}} for #' + key + ' is undefined.');
+      // console.log('argument {{' + arg + '}} for #' + key + ' is undefined.');
       return matched_text;
     });
   }

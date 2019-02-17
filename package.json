@@ -1,8 +1,7 @@
 {
-  "name": "ngdz-file-viewers",
-  "version": "0.0.3",
+  "name": "ngdz-file-viewer",
+  "version": "0.0.1",
   "description": "",
-  "main": "index.js",
   "scripts": {},
   "repository": {
     "type": "git",
