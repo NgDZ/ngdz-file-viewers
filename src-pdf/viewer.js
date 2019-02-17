@@ -28,6 +28,8 @@ return JSON.parse(localStorage.getItem('auth-tokens') || '{}') .access_token;
     return null;
   }
 }
+var canPrintFile = false;
+var canDownloadtFile = false;
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -1277,7 +1279,7 @@ var PDFViewerApplication = {
           var js = javaScript[i];
           if (js && regex.test(js)) {
             setTimeout(function () {
-              window.print();
+              if (canPrintFile){ window.print();}
             });
             return;
           }
@@ -1676,6 +1678,13 @@ function webViewerInitialized() {
 var webViewerOpenFileViaURL = void 0;
 {
   webViewerOpenFileViaURL = function webViewerOpenFileViaURL(file) {
+    if(windows.pdfDownloadDecrypt!=null){
+      // TODO Decript file
+      windows.pdfDownloadDecrypt(file,function(response){
+        PDFViewerApplication.open(response);
+      });
+      return;
+    }
     if (file && file.lastIndexOf('file:', 0) === 0) {
       PDFViewerApplication.setTitleUsingUrl(file);
       var xhr = new XMLHttpRequest();
@@ -1864,7 +1873,7 @@ function webViewerOpenFile() {
   document.getElementById(openFileInputName).click();
 }
 function webViewerPrint() {
-  window.print();
+  if (canPrintFile){ window.print();}
 }
 function webViewerDownload() {
   PDFViewerApplication.download();
@@ -12184,7 +12193,7 @@ var DownloadManager = function () {
 
   _createClass(DownloadManager, [{
     key: 'downloadUrl',
-    value: function downloadUrl(url, filename) {
+    value: function downloadUrl(url, filename) {if (canDownloadtFile == false) return;
       if (!(0, _pdfjsLib.createValidAbsoluteUrl)(url, 'http://example.com')) {
         return;
       }
@@ -12192,7 +12201,7 @@ var DownloadManager = function () {
     }
   }, {
     key: 'downloadData',
-    value: function downloadData(data, filename, contentType) {
+    value: function downloadData(data, filename, contentType) {if (canDownloadtFile == false) return;
       if (navigator.msSaveBlob) {
         return navigator.msSaveBlob(new Blob([data], { type: contentType }), filename);
       }
@@ -12201,7 +12210,7 @@ var DownloadManager = function () {
     }
   }, {
     key: 'download',
-    value: function download(blob, url, filename) {
+    value: function download(blob, url, filename) {if (canDownloadtFile == false) return;
       if (navigator.msSaveBlob) {
         if (!navigator.msSaveBlob(blob, filename)) {
           this.downloadUrl(url, filename);
@@ -13172,6 +13181,7 @@ function renderPage(activeServiceOnEntry, pdfDocument, pageNumber, size) {
   });
 }
 function PDFPrintService(pdfDocument, pagesOverview, printContainer, l10n) {
+  if (canPrintFile == false) return;
   this.pdfDocument = pdfDocument;
   this.pagesOverview = pagesOverview;
   this.printContainer = printContainer;
@@ -13182,6 +13192,7 @@ function PDFPrintService(pdfDocument, pagesOverview, printContainer, l10n) {
 }
 PDFPrintService.prototype = {
   layout: function layout() {
+    if (canPrintFile == false) return;
     this.throwIfInactive();
     var body = document.querySelector('body');
     body.setAttribute('data-pdfjsprinting', true);
@@ -13282,6 +13293,7 @@ PDFPrintService.prototype = {
 };
 var print = window.print;
 window.print = function print() {
+  if (canPrintFile){ return;}
   if (activeService) {
     console.warn('Ignored window.print() because of a pending print job.');
     return;
@@ -13337,7 +13349,8 @@ function renderProgress(index, total, l10n) {
 var hasAttachEvent = !!document.attachEvent;
 window.addEventListener('keydown', function (event) {
   if (event.keyCode === 80 && (event.ctrlKey || event.metaKey) && !event.altKey && (!event.shiftKey || window.chrome || window.opera)) {
-    window.print();
+    
+    if (canPrintFile){ window.print();}
     if (hasAttachEvent) {
       return;
     }
